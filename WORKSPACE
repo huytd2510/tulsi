@@ -18,9 +18,8 @@ http_archive(
 
 http_archive(
     name = "build_bazel_rules_apple",
-    sha256 = "2e6c88b66c671b4abb7cebc5d072804d6fc42bd18aa31586b060e2629aae7251",
-    strip_prefix = "rules_apple-0bba769a9aafe9bd3349b32a326e599553886e98",
-    url = "https://github.com/bazelbuild/rules_apple/archive/0bba769a9aafe9bd3349b32a326e599553886e98.tar.gz",
+    sha256 = "77e8bf6fda706f420a55874ae6ee4df0c9d95da6c7838228b26910fc82eea5a2",
+    url = "https://github.com/bazelbuild/rules_apple/releases/download/0.32.0/rules_apple.0.32.0.tar.gz",
 )
 
 load(
