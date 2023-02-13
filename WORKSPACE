@@ -8,18 +8,27 @@ http_archive(
     url = "https://github.com/bazelbuild/stardoc/archive/d93ee5347e2d9c225ad315094507e018364d5a67.tar.gz",
 )
 
-# TODO: Remove with next rules_swift + rules_apple release
-http_archive(
-    name = "build_bazel_rules_swift",
-    sha256 = "fff70e28e9b28a4249fbfb413f860cb9b5df567fe20a1bc4017dd89e678dd9b5",
-    strip_prefix = "rules_swift-35ddf9f6e8c0fcd8bcb521e92dd4fd11c3f181b6",
-    url = "https://github.com/bazelbuild/rules_swift/archive/35ddf9f6e8c0fcd8bcb521e92dd4fd11c3f181b6.tar.gz",
-)
+# Rules Swift
+
+RULES_SWIFT_VERSION = "vinone-0.18.1"
+
+RULES_SWIFT_SHA = "a065a2aabffc6e8ddee6988d407c8a2ca46a8c61c78c96d6ff07601ee5427b26"
 
 http_archive(
+    name = "build_bazel_rules_swift",
+    sha256 = RULES_SWIFT_SHA,
+    strip_prefix = "rules_swift-%s" % RULES_SWIFT_VERSION,
+    url = "https://github.com/kevinnguyenhoang91/rules_swift/archive/%s.tar.gz" % RULES_SWIFT_VERSION,
+)
+
+# Apple Bazel Rules Dependency
+RULES_APPLE_VERSION = "vinone-0.21.2.2"
+RULES_APPLE_SHA = "e8fccef2e28e2205308255847b98aa5e4ffb0244122eb80c2dfaa565ae1ce476"
+http_archive(
     name = "build_bazel_rules_apple",
-    sha256 = "77e8bf6fda706f420a55874ae6ee4df0c9d95da6c7838228b26910fc82eea5a2",
-    url = "https://github.com/bazelbuild/rules_apple/releases/download/0.32.0/rules_apple.0.32.0.tar.gz",
+    sha256 = RULES_APPLE_SHA,
+    strip_prefix = "rules_apple-vinone-0.21.2.2",
+    urls = ["https://github.com/diesel-engineer/rules_apple/archive/%s.tar.gz" % RULES_APPLE_VERSION],
 )
 
 load(
