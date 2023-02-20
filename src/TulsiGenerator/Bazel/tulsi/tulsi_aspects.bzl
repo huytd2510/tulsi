@@ -912,6 +912,12 @@ def _tulsi_sources_aspect(target, ctx):
         test_deps = None
         module_name = None
 
+    framework_imports = _collect_framework_imports(rule_attr) + \
+                            _collect_framework_imports_from_xcframework_imports(
+                                rule_attr,
+                                target_triplet,
+                            )
+
     info = _struct_omitting_none(
         artifacts = artifacts,
         attr = _struct_omitting_none(**all_attributes),
@@ -924,7 +930,7 @@ def _tulsi_sources_aspect(target, ctx):
         test_deps = test_deps,
         extensions = extensions,
         app_clips = app_clips,
-        framework_imports = _collect_framework_imports(rule_attr),
+        framework_imports = framework_imports,
         generated_files = generated_files,
         generated_non_arc_files = generated_non_arc_files,
         includes = target_includes,
@@ -964,6 +970,32 @@ def _tulsi_sources_aspect(target, ctx):
             filtering_info = _target_filtering_info(ctx),
         ),
     ]
+
+def _collect_framework_imports_from_xcframework_imports(
+        rule_attr,
+        target_triplet):
+    """Extracts framework directories from xcframework imports for the current target platform."""
+    all_framework_paths = _collect_bundle_paths(
+        rule_attr,
+        ["xcframework_imports"],
+        ".framework",
+    )
+
+    framework_imports = []
+    for p in all_framework_paths:
+        path = p.path
+        library_identifier = paths.basename(paths.dirname(path))
+        if not library_identifier.startswith(target_triplet.os):
+            continue
+        if target_triplet.architecture not in library_identifier:
+            continue
+        if target_triplet.environment != "simulator" and library_identifier.endswith("-simulator"):
+            continue
+        if target_triplet.environment == "simulator" and not library_identifier.endswith("-simulator"):
+            continue
+        framework_imports.append(p)
+
+    return framework_imports
 
 def _bundle_dsym_path(apple_bundle):
     """Compute the dSYM path for the bundle.
